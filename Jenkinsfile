@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSE = "docker-compose"
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/Krishnaranibal13/ecommerce-project-react-django.git'
+            }
+        }
+
+        stage('Stop Old Containers') {
+            steps {
+                sh 'docker-compose down || true'
+            }
+        }
+
+        stage('Build & Deploy') {
+            steps {
+                sh '''
+                docker-compose up -d --build
+                '''
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                sh '''
+                docker exec django_backend python manage.py migrate
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment Successful!'
+        }
+        failure {
+            echo '❌ Deployment Failed!'
+        }
+    }
+}

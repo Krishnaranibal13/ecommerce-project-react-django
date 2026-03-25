@@ -1,15 +1,12 @@
 pipeline {
     agent any
 
-    environment {
-        COMPOSE = "docker-compose"
-    }
-
     stages {
 
-        stage('Clone Code') {
+        stage('Check Files') {
             steps {
-                git branch: 'main', url: 'https://github.com/Krishnaranibal13/ecommerce-project-react-django.git'
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
 
@@ -21,17 +18,13 @@ pipeline {
 
         stage('Build & Deploy') {
             steps {
-                sh '''
-                docker-compose up -d --build
-                '''
+                sh 'docker-compose up -d --build'
             }
         }
 
         stage('Run Migrations') {
             steps {
-                sh '''
-                docker exec django_backend python manage.py migrate
-                '''
+                sh 'docker exec django_backend python manage.py migrate'
             }
         }
     }

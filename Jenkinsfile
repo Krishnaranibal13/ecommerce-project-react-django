@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git 'https://github.com/Krishnaranibal13/ecommerce-project-react-django.git'
+                git branch: 'main', url: 'https://github.com/Krishnaranibal13/ecommerce-project-react-django.git'
             }
         }
 
